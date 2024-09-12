@@ -9,7 +9,7 @@ export default function Workout(props) {
       <div className='flex flex-col gap-4'>
         {workout.map((exercise, i) => {
           return(
-           <ExcerciseCard exercise={exercise}  key={i}/>
+           <ExcerciseCard i={i} exercise={exercise} key={i}/>
           )
         })}
       </div>
