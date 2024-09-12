@@ -82,20 +82,18 @@ export default function Generator(props) {
                     </div>
                 )}
             </div>
-        <Header index={'03'} title={"Vyberte si cvik"} description={"Vyberte si cvik kterým chcete začít bude asi potřebovat upravit pak :)))))"}/>
-        <div className='grid grid-cols-3 gap-4'>
-
-        {Object.keys(SCHEMES).map((scheme, schemeIndex) => {
-            return(
-                <button onClick={() => {
-                    setGoals(scheme)
-                }} className={'bg-slate-950 border px-4 py-3 rounded-lg duration-200 hover:border-blue-600' +  (scheme === goals ?  ' border-blue-600' : ' border-blue-400')} key={schemeIndex}>
-                    <p className='capitalize'>{scheme.replaceAll('_', " ")}</p>
-                </button>
-            )
-        })}
-
-        </div>
+            <Header index={'03'} title={'Become Juggernaut'} description={"Select your ultimate objective."} />
+            <div className='grid grid-cols-1 sm:grid-cols-3 gap-4'>
+                {Object.keys(SCHEMES).map((scheme, schemeIndex) => {
+                    return (
+                        <button onClick={() => {
+                            setGoals(scheme)
+                        }} className={'bg-slate-950 border  duration-200 hover:border-blue-600 py-3 rounded-lg px-4 ' + (scheme === goals ? ' border-blue-600' : ' border-blue-400')} key={schemeIndex}>
+                            <p className='capitalize'>{scheme.replaceAll('_', " ")}</p>
+                        </button>
+                    )
+                })}
+            </div>
         <Button func={updateWorkout} text={"Vytvořit"}/>
     </SectionWrapper>
   )
