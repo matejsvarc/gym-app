@@ -2,7 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 import SectionWrapper from './SectionWrapper'
 import { SCHEMES, WORKOUTS } from '../utils/workouts'
-import '../index.css'
+import Button from './Button'
 
 function Header(props) {
     const { index, title, description } = props
@@ -17,11 +17,9 @@ function Header(props) {
     )
 }
 
-export default function Generator() {
+export default function Generator(props) {
     const [showModal, setShowModal] = useState(false)
-    const[poison, setPoison] = useState('individual')
-    const[muscles, setMuscles] = useState([])
-    const[goals, setGoals] = useState('strenght_power')
+    const { poison, setPoison, muscles, setMuscles, goals, setGoals, updateWorkout } = props
 
     function toggleModal() {
         setShowModal(!showModal)
@@ -58,7 +56,7 @@ export default function Generator() {
                 <button onClick={() => {
                     setMuscles([])
                     setPoison(type)
-                }} className={'bg-slate-950 border  py-3 rounded-lg duration-200 hover:border-blue-600' +  (type === poison ?  ' border-blue-600' : ' border-blue-400')} key={typeIndex}>
+                }} className={'bg-slate-950 border px-4 py-3 rounded-lg duration-200 hover:border-blue-600' +  (type === poison ?  ' border-blue-600' : ' border-blue-400')} key={typeIndex}>
                     <p className='capitalize'>{type.replaceAll('_', " ")}</p>
                 </button>
             )
@@ -91,12 +89,14 @@ export default function Generator() {
             return(
                 <button onClick={() => {
                     setGoals(scheme)
-                }} className={'bg-slate-950 border  py-3 rounded-lg duration-200 hover:border-blue-600' +  (scheme === goals ?  ' border-blue-600' : ' border-blue-400')} key={schemeIndex}>
+                }} className={'bg-slate-950 border px-4 py-3 rounded-lg duration-200 hover:border-blue-600' +  (scheme === goals ?  ' border-blue-600' : ' border-blue-400')} key={schemeIndex}>
                     <p className='capitalize'>{scheme.replaceAll('_', " ")}</p>
                 </button>
             )
         })}
+
         </div>
+        <Button func={updateWorkout} text={"Vytvořit"}/>
     </SectionWrapper>
   )
 }
