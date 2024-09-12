@@ -20,11 +20,33 @@ function Header(props) {
 export default function Generator() {
     const [showModal, setShowModal] = useState(false)
     const[poison, setPoison] = useState('individual')
-    const[muscle, setMuscles] = useState([])
+    const[muscles, setMuscles] = useState([])
     const[goals, setGoals] = useState('strenght_power')
 
     function toggleModal() {
         setShowModal(!showModal)
+    }
+    function updateMuscles(muscleGroup) {
+        if (muscles.includes(muscleGroup)) {
+            setMuscles(muscles.filter(val => val !== muscleGroup))
+            return
+        }
+
+        if (muscles.length > 2) {
+            return
+        }
+
+        if (poison !== 'individual') {
+            setMuscles([muscleGroup])
+            setShowModal(false)
+            return
+        }
+
+        setMuscles([...muscles, muscleGroup])
+        if (muscles.length === 2) {
+            setShowModal(false)
+        }
+
     }
   return (
     <SectionWrapper id={'generate'} header={"Generate your workout"} title={['změnit', 'tenhle', 'text taky pak']}>
@@ -33,29 +55,43 @@ export default function Generator() {
 
         {Object.keys(WORKOUTS).map((type, typeIndex) => {
             return(
-                <button className='bg-slate-950 border border-blue-400 py-3 rounded-lg duration-200 hover:border-blue-600'key={typeIndex}>
+                <button onClick={() => {
+                    setMuscles([])
+                    setPoison(type)
+                }} className={'bg-slate-950 border  py-3 rounded-lg duration-200 hover:border-blue-600' +  (type === poison ?  ' border-blue-600' : ' border-blue-400')} key={typeIndex}>
                     <p className='capitalize'>{type.replaceAll('_', " ")}</p>
                 </button>
             )
         })}
         </div>
-        <Header index={'02'} title={"Zaměření"} description={"Vyberte si svaly na které se chcete zaměřit"}/>
-        <div className='bg-slate-950 border border-solid border-blue-400 rounded-lg flex flex-col'>
-            <button onClick={toggleModal} className='relative p-3 flex items-center justify-center'>
-                <p>Vyberte svalové skupiny</p>
-                <i className="fa-solid absolute right-3 top-1/2 -translate-y-1/2 fa-caret-down"></i>
-            </button>
-            {showModal && (
-                <div>Modal</div>
-
-            )}
-        </div>
-        <Header index={'03'} title={"Vyberte si cvik"} description={"Vyberte si cvik kterým chcete začít "}/>
+        <Header index={'02'} title={'Vyber si sval'} description={"Vyber si sval na který se chceš soustředit"} />
+            <div className='bg-slate-950  border border-solid border-blue-400 rounded-lg flex flex-col'>
+                <button onClick={toggleModal} className='relative p-3 flex items-center justify-center'>
+                    <p className='capitalize'>{muscles.length == 0 ? 'Vyberte svalovou skupinu' : muscles.join(', ')}</p>
+                    <i className="fa-solid absolute right-3 top-1/2 -translate-y-1/2 fa-caret-down"></i>
+                </button>
+                {showModal && (
+                    <div className='flex flex-col px-3 pb-3'>
+                        {(poison === 'individual' ? WORKOUTS[poison] : Object.keys(WORKOUTS[poison])).map((muscleGroup, muscleGroupIndex) => {
+                            return (
+                                <button onClick={() => {
+                                    updateMuscles(muscleGroup)
+                                }} key={muscleGroupIndex} className={'hover:text-blue-400 duration-200 ' + (muscles.includes(muscleGroup) ? ' text-blue-400' : ' ')}>
+                                    <p className='uppercase'>{muscleGroup.replaceAll('_', ' ')}</p>
+                                </button>
+                            )
+                        })}
+                    </div>
+                )}
+            </div>
+        <Header index={'03'} title={"Vyberte si cvik"} description={"Vyberte si cvik kterým chcete začít bude asi potřebovat upravit pak :)))))"}/>
         <div className='grid grid-cols-3 gap-4'>
 
         {Object.keys(SCHEMES).map((scheme, schemeIndex) => {
             return(
-                <button className='bg-slate-950 border border-blue-400 py-3 rounded-lg duration-200 hover:border-blue-600'key={schemeIndex}>
+                <button onClick={() => {
+                    setGoals(scheme)
+                }} className={'bg-slate-950 border  py-3 rounded-lg duration-200 hover:border-blue-600' +  (scheme === goals ?  ' border-blue-600' : ' border-blue-400')} key={schemeIndex}>
                     <p className='capitalize'>{scheme.replaceAll('_', " ")}</p>
                 </button>
             )
